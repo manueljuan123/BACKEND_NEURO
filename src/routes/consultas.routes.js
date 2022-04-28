@@ -7,11 +7,6 @@ const path = 'consultas'
 router.post(
     `/${path}/enviar`,
     consultaController.postConsulta
-)
-
-router.get(
-    `/${path}/getAll`,
-    consultaController.ObtenerConsultas
-)
+);
 
 module.exports = router

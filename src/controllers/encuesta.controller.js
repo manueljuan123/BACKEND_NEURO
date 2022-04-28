@@ -1,4 +1,3 @@
-const conexion = require('../config/database')
 const nodemailer = require("nodemailer")
 
 // Esta ruta de e-mail permite enviar encuesta de satisfacción a correo
@@ -6,32 +5,20 @@ exports.postEncuesta = (req, res) => {
     const { experiencia, recomendacion, sugerencia } = req.body
 
     try{
-        if (experiencia && recomendacion && sugerencia){
-
-           conexion.query('INSERT INTO encuesta SET ?',
-           { experiencia:experiencia,
-             recomendacion:recomendacion,
-             sugerencia:sugerencia }
-             ,(error, res)=>{
-                 if(error){
-                     console.log(error)
-                 }
-             })
-                console.log("Datos insertados correctamente")    
-                
+        if (experiencia && recomendacion && sugerencia){                
              var transporter = nodemailer.createTransport({
                  host: "smtp.gmail.com",
                  port: 465,
                  secure: true,
                  auth: {
-                     user: "mensajeroneuroimagenes@gmail.com",
-                     pass: "tlzvlpvafaiazani"
+                     user: process.env.EMAIL_MENSAJERO_NEURO,
+                     pass: process.env.PASS_MENSAJERO_NEURO
                  }
              });
 
              var mailOptions = {
                  from: "Remitente",
-                 to: "juanmanuelyatemendez@gmail.com",
+                 to: process.env.RECEPCION_PQRS_ENCUESTA,
                  subject: "Encuesta",
                  html: `<h1> Revise por favor la página web debido a que hay una nueva PQRS </h1>
                     <h2>Experiencia: ${ req.body.experiencia}</h2>
@@ -58,12 +45,4 @@ exports.postEncuesta = (req, res) => {
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message })
     }
-}
-
-/*Esta ruta permite obtener todas las encuestas de satisfa */
-exports.ObtenerEncuestas = async (req, res) => {
-    conexion.query('SELECT * FROM encuesta', function (err, result){
-        if(err) throw err;
-        res.json(result)
-    })
 }

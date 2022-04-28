@@ -1,4 +1,3 @@
-const conexion = require('../config/database')
 const nodemailer = require("nodemailer")
 
 
@@ -7,40 +6,22 @@ exports.postConsulta = (req, res) => {
     const { nombre, email, tipo_documento, numero_documento, celular1,
             celular2, eps, servicio, mensaje} = req.body
     try{
-        if (nombre && tipo_documento && numero_documento && celular1
-            && eps && servicio && mensaje) {
-            
-        conexion.query('INSERT INTO consultas SET ?',
-        { nombre:nombre,
-          email:email,
-          tipo_documento:tipo_documento,
-          numero_documento:numero_documento,
-          celular1:celular1,
-          celular2:celular2,
-          servicio:servicio,
-          eps:eps,
-          mensaje:mensaje}
-          ,(error, res)=>{
-              if(error){
-                  console.log(error)
-              }
-          })
-                console.log("Consulta ingresada exitosamente")
-
+        if (nombre && email && tipo_documento && numero_documento
+            && celular1 && eps && servicio && mensaje) {
 
         var transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
             secure: true,
             auth: {
-                user: "mensajeroneuroimagenes@gmail.com",
-                pass: "tlzvlpvafaiazani"
+                user: process.env.EMAIL_MENSAJERO_NEURO,
+                pass: process.env.PASS_MENSAJERO_NEURO
             }
         });
     
         var mailOptions = {
             from: "Remitente",
-            to: "juanmanuelyatemendez@gmail.com", //"citas@neuroimagenes"
+            to: process.env.RECEPCION_CONSULTAS, //"citas@neuroimagenes"
             subject: "Actualización Consultas",
             html: `<h1> Revise por favor la página web debido a que hay una nueva consulta </h1>
                     <h2>Nombre: ${ req.body.nombre}</h2>
@@ -76,10 +57,4 @@ exports.postConsulta = (req, res) => {
         }
 }
 
-exports.ObtenerConsultas = (req, res) => {
-    conexion.query('SELECT * FROM consultas', function(err, result, fields){
-        if(err) throw err;
-        res.json(result)
-    })
-}
 
