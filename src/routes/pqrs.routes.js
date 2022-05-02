@@ -5,7 +5,7 @@ const path = 'pqrs'
 
 // RUTA ENVIAR PQRS
 router.post(
-    `/${path}/enviar_pqrs`,
+    `/${path}/enviar`,
     pqrsController.postPQRS
 )
 
