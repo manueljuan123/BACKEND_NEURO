@@ -6,7 +6,7 @@ const path = 'pqrs'
 // RUTA ENVIAR PQRS
 router.post(
     `/${path}/enviar`,
-    pqrsController.postPQRS
+    pqrsController.postPQRS,
 )
 
 module.exports = router
