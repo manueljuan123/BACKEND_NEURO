@@ -4,6 +4,13 @@ const cors = require('cors')
 const app = express()
 const bodyParser = require('body-parser')
 
+const path = __dirname + '/views/ProjectVS/';
+app.use(express.static(path));
+
+app.get('/', (req, res) => {
+    res.sendFile(path + 'index.html');
+});
+
 // Settings
 app.set('port', process.env.PORT || 5000);
 app.set('json spaces', 2);
